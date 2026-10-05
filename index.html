@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAMZU - Выберите город</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0b0614 0%, #170d2b 50%, #0b0614 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 16px;
+        }
+
+        .header {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 24px;
+        }
+
+        .logo-icon {
+            font-size: 28px;
+            margin-bottom: 4px;
+        }
+
+        .brand-title {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #d1c4e9;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #00e676;
+            border-radius: 50%;
+            margin-right: 8px;
+            box-shadow: 0 0 8px #00e676;
+        }
+
+        .section-title {
+            width: 100%;
+            max-width: 400px;
+            font-size: 12px;
+            letter-spacing: 1.5px;
+            color: #9575cd;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .cities-list {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: auto;
+        }
+
+        .city-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .city-card:active {
+            transform: scale(0.98);
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(149, 117, 205, 0.4);
+        }
+
+        .city-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .city-icon-wrap {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #b39ddb;
+        }
+
+        .city-name {
+            font-size: 16px;
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        .city-arrow {
+            color: #7c4dff;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+
+        .secure-text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #9e9e9e;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .meta-info {
+            font-size: 11px;
+            color: #616161;
+        }
+
+        #profiles-view {
+            display: none;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .back-btn {
+            background: none;
+            border: none;
+            color: #b39ddb;
+            font-size: 14px;
+            cursor: pointer;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="home-view" style="width: 100%; max-width: 400px; display: flex; flex-direction: column; align-items: center;">
+        <div class="header">
+            <div class="logo-icon">🪼</div>
+            <div class="brand-title">LAMZU</div>
+            <div class="status-badge">
+                <span class="status-dot"></span> СЕЙЧАС СВОБОДНЫ: <span id="total-count">538</span>
+            </div>
+        </div>
+
+        <div class="section-title">ВЫБЕРИТЕ ГОРОД</div>
+
+        <div class="cities-list" id="citiesList">
+            <div class="city-card" onclick="selectCity('Алматы')">
+                <div class="city-left">
+                    <div class="city-icon-wrap">📍</div>
+                    <div class="city-name">Алматы</div>
+                </div>
+                <div class="city-arrow">&gt;</div>
+            </div>
+            <div class="city-card" onclick="selectCity('Астана')">
+                <div class="city-left">
+                    <div class="city-icon-wrap">📍</div>
+                    <div class="city-name">Астана</div>
+                </div>
+                <div class="city-arrow">&gt;</div>
+            </div>
+            <div class="city-card" onclick="selectCity('Дубай')">
+                <div class="city-left">
+                    <div class="city-icon-wrap">📍</div>
+                    <div class="city-name">Дубай</div>
+                </div>
+                <div class="city-arrow">&gt;</div>
+            </div>
+            <div class="city-card" onclick="selectCity('Екатеринбург')">
+                <div class="city-left">
+                    <div class="city-icon-wrap">📍</div>
+                    <div class="city-name">Екатеринбург</div>
+                </div>
+                <div class="city-arrow">&gt;</div>
+            </div>
+            <div class="city-card" onclick="selectCity('Казань')">
+                <div class="city-left">
+                    <div class="city-icon-wrap">📍</div>
+                    <div class="city-name">Казань</div>
+                </div>
+                <div class="city-arrow">&gt;</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="secure-text">🛡️ SECURE & ANONYMOUS</div>
+            <div class="meta-info">18+ | Privacy Policy</div>
+        </div>
+    </div>
+
+    <div id="profiles-view">
+        <button class="back-btn" onclick="goBack()">← Назад к городам</button>
+        <div class="section-title" id="selectedCityTitle">АНКЕТЫ</div>
+        <div id="profilesList" style="display: flex; flex-direction: column; gap: 12px;"></div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        function selectCity(cityName) {
+            document.getElementById('home-view').style.display = 'none';
+            document.getElementById('profiles-view').style.display = 'block';
+            document.getElementById('selectedCityTitle').innerText = `ГОРОД: ${cityName.toUpperCase()}`;
+            loadProfiles(cityName);
+        }
+
+        function goBack() {
+            document.getElementById('profiles-view').style.display = 'none';
+            document.getElementById('home-view').style.display = 'flex';
+        }
+
+        async function loadProfiles(city) {
+            const container = document.getElementById('profilesList');
+            container.innerHTML = '<p style="text-align:center; color: #9e9e9e; margin-top: 20px;">Загрузка анкет...</p>';
+
+            try {
+                // Замени адрес на твой реальный сервер или ngrok-ссылку
+                const response = await fetch(`https://твой-бэкенд-сервер.com/api/profiles?city=${encodeURIComponent(city)}`);
+                const profiles = await response.json();
+
+                if (profiles.length === 0) {
+                    container.innerHTML = '<p style="text-align:center; color: #9e9e9e; margin-top: 20px;">В этом городе пока нет активных анкет.</p>';
+                    return;
+                }
+
+                container.innerHTML = '';
+                profiles.forEach(p => {
+                    container.innerHTML += `
+                        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column;">
+                            <img src="${p.photo}" style="width: 100%; height: 250px; object-fit: cover;">
+                            <div style="padding: 16px;">
+                                <h3 style="font-size: 18px; margin-bottom: 4px;">${p.name}, ${p.age}</h3>
+                                <p style="font-size: 14px; color: #b0bec5; margin-bottom: 12px;">${p.description}</p>
+                                <button onclick="tg.showAlert('Связаться с ${p.name}')" style="width: 100%; background: #7c4dff; color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;">Выбрать</button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+            } catch (e) {
+                container.innerHTML = '<p style="text-align:center; color: #ff5252;">Ошибка загрузки анкет с сервера.</p>';
+            }
+        }
+    </script>
+</body>
+</html>
